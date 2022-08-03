@@ -111,10 +111,10 @@ class OpenWeatherMap(BaseWeatherProvider):
             day["temperatureMin"] = str(round(weather_data["temp"]["min"],1))
             day["temperatureMax"] = str(round(weather_data["temp"]["max"],1))
             day["temperatureFeelsLike"] = str(round(response_data["current"]["feels_like"],1))
-            day["icon"] = self.get_icon_from_openweathermap_weathercode(weather_data["weather"][0]["id"], self.is_daytime(self.location_lat, self.location_long))
+            day["icon"] = self.get_icon_from_openweathermap_weathercode(weather_data["weather"][0]["id"], 1)
             day["description"] = weather_data["weather"][0]["description"]
             if "rain" in weather_data: 
-                day["rain"] = " - " + str(weather_data["rain"]) + "mm Regen"
+                day["rain"] = "(" + str(weather_data["rain"]) + "mm)"
             else:
                 day["rain"] = ""
             weather["prediction"].append(day)
