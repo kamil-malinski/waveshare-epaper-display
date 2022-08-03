@@ -4,12 +4,14 @@ import datetime
 import sys
 import os
 import logging
-from weather_providers import climacell, openweathermap, metofficedatahub, metno, meteireann, accuweather, visualcrossing, weathergov
+from weather_providers import climacell, openweathermap, metofficedatahub, metno, meteireann, accuweather, visualcrossing, weathergov, fibaro
 from alert_providers import metofficerssfeed, weathergovalerts
 from alert_providers import meteireann as meteireannalertprovider
 from utility import update_svg, configure_logging
 import textwrap
 import html
+import locale, datetime
+locale.setlocale(locale.LC_ALL, "de_DE")
 
 configure_logging()
 
@@ -139,6 +141,8 @@ def main():
         units = "imperial"
         degrees = "°F"
 
+    fibaro_data = fibaro.Fibaro().get_weather()    
+
     weather = get_weather(location_lat, location_long, units)
 
     if not weather:
@@ -151,17 +155,42 @@ def main():
     alert_message = format_alert_description(alert_message)
     
     output_dict = {
-        'LOW_ONE': "{}{}".format(str(round(weather['temperatureMin'])), degrees),
-        'HIGH_ONE': "{}{}".format(str(round(weather['temperatureMax'])), degrees),
+        'LOW_ONE': "{}{}".format(weather['temperatureMin'], degrees),
+        'HIGH_ONE': "{}{}".format(weather['temperatureMax'], degrees),
         'ICON_ONE': weather["icon"],
+        'TODAYS_RAIN': weather["rain"] if weather_desc[2] else "",
         'WEATHER_DESC_1': weather_desc[1],
-        'WEATHER_DESC_2': weather_desc[2],
-        'TIME_NOW': datetime.datetime.now().strftime("%-I:%M %p"),
-        'HOUR_NOW': datetime.datetime.now().strftime("%-I %p"),
-        'DAY_ONE': datetime.datetime.now().strftime("%b %-d, %Y"),
+        'WEATHER_DESC_2': weather_desc[2] if weather_desc[2] else weather["rain"],
+        'TIME_NOW': datetime.datetime.now().strftime("%H:%M"),
+        'HOUR_NOW': datetime.datetime.now().strftime("%H"),
+        'DAY_ONE': datetime.datetime.now().strftime("%-d.%b., %Y"),
         'DAY_NAME': datetime.datetime.now().strftime("%A"),
         'ALERT_MESSAGE_VISIBILITY': "visible" if alert_message else "hidden",
-        'ALERT_MESSAGE': alert_message
+        'ALERT_MESSAGE': alert_message,
+        'TEMP_INDOOR_UP': "{}{}".format(fibaro_data["temp_indoor_up"], degrees),
+        'TEMP_INDOOR_DOWN': "{}{}".format(fibaro_data["temp_indoor_down"], degrees),
+        'TEMP_OUTDOOR': "{}{}".format(fibaro_data["temp_outdoor"] + " (" + weather["temperatureFeelsLike"] + ")", degrees),
+
+        'PREDICTION1_DAY': "Morgen, " + datetime.datetime.fromtimestamp(weather["prediction"][0]["time"]).strftime("%A, %-d.%b."),
+        'PREDICTION1_MAX': "{}{}".format(weather["prediction"][0]["temperatureMax"], degrees),
+        'PREDICTION1_MIN': "{}{}".format(weather["prediction"][0]["temperatureMin"], degrees),
+        'PREDICTION1_ICON': weather["prediction"][0]["icon"],
+        'PREDICTION1_DESCRIPTION': weather["prediction"][0]["description"],
+        'PREDICTION1_RAIN': weather["prediction"][0]["rain"],
+
+        'PREDICTION2_DAY': "Übermorgen, " + datetime.datetime.fromtimestamp(weather["prediction"][1]["time"]).strftime("%A, %-d.%b."),
+        'PREDICTION2_MAX': "{}{}".format(weather["prediction"][1]["temperatureMax"], degrees),
+        'PREDICTION2_MIN': "{}{}".format(weather["prediction"][1]["temperatureMin"], degrees),
+        'PREDICTION2_ICON': weather["prediction"][1]["icon"],
+        'PREDICTION2_DESCRIPTION': weather["prediction"][1]["description"],
+        'PREDICTION2_RAIN': weather["prediction"][1]["rain"],
+
+        'PREDICTION3_DAY': datetime.datetime.fromtimestamp(weather["prediction"][2]["time"]).strftime("%A, %-d.%b."),
+        'PREDICTION3_MAX': "{}{}".format(weather["prediction"][2]["temperatureMax"], degrees),
+        'PREDICTION3_MIN': "{}{}".format(weather["prediction"][2]["temperatureMin"], degrees),
+        'PREDICTION3_ICON': weather["prediction"][2]["icon"],
+        'PREDICTION3_DESCRIPTION': weather["prediction"][2]["description"],
+        'PREDICTION3_RAIN': weather["prediction"][2]["rain"],
     }
 
     logging.debug("main() - {}".format(output_dict))

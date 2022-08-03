@@ -10,8 +10,8 @@ function log {
 log "Add weather info"
 python3 screen-weather-get.py
 
-log "Add Calendar info"
-python3 screen-calendar-get.py
+#log "Add Calendar info"
+#python3 screen-calendar-get.py
 
 if [ -f screen-custom-get.py ]; then
     log "Add Custom data"

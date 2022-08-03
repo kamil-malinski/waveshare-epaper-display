@@ -82,7 +82,7 @@ class OpenWeatherMap(BaseWeatherProvider):
     # https://openweathermap.org/api/one-call-api
     def get_weather(self):
 
-        url = ("https://api.openweathermap.org/data/2.5/onecall?lat={}&lon={}&exclude=current,minutely,hourly&units={}&appid={}"
+        url = ("https://api.openweathermap.org/data/2.5/onecall?lang=de&lat={}&lon={}&exclude=minutely,hourly&units={}&appid={}"
                .format(self.location_lat, self.location_long, self.units, self.openweathermap_apikey))
         response_data = self.get_response_json(url)
         logging.debug(response_data)
@@ -91,9 +91,33 @@ class OpenWeatherMap(BaseWeatherProvider):
 
         # { "temperatureMin": "2.0", "temperatureMax": "15.1", "icon": "mostly_cloudy", "description": "Cloudy with light breezes" }
         weather = {}
-        weather["temperatureMin"] = weather_data["temp"]["min"]
-        weather["temperatureMax"] = weather_data["temp"]["max"]
+        weather["temperatureMin"] = str(round(weather_data["temp"]["min"],1))
+        weather["temperatureMax"] = str(round(weather_data["temp"]["max"],1))
+        weather["temperatureFeelsLike"] = str(round(response_data["current"]["feels_like"]))
         weather["icon"] = self.get_icon_from_openweathermap_weathercode(weather_data["weather"][0]["id"], self.is_daytime(self.location_lat, self.location_long))
-        weather["description"] = weather_data["weather"][0]["description"].title()
+        weather["description"] = weather_data["weather"][0]["description"]
+        if "rain" in weather_data: 
+            weather["rain"] = str(weather_data["rain"]) + "mm"
+        else:
+            weather["rain"] = ""        
+
+        weather["prediction"] = []
+
+        for i in range(1, 4):
+            weather_data = response_data["daily"][i]
+            
+            day = {}
+            day["time"] = weather_data["dt"]
+            day["temperatureMin"] = str(round(weather_data["temp"]["min"],1))
+            day["temperatureMax"] = str(round(weather_data["temp"]["max"],1))
+            day["temperatureFeelsLike"] = str(round(response_data["current"]["feels_like"],1))
+            day["icon"] = self.get_icon_from_openweathermap_weathercode(weather_data["weather"][0]["id"], self.is_daytime(self.location_lat, self.location_long))
+            day["description"] = weather_data["weather"][0]["description"]
+            if "rain" in weather_data: 
+                day["rain"] = " - " + str(weather_data["rain"]) + "mm Regen"
+            else:
+                day["rain"] = ""
+            weather["prediction"].append(day)
+
         logging.debug(weather)
         return weather

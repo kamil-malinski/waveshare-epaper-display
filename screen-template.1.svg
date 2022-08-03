@@ -19,25 +19,19 @@
     </g>
 
     <text id="calendarentry1" x="330" y="255" font-size="29px" style="font-size:29px;line-height:0%;font-family:'Nimbus Sans L';text-anchor:beginning">
-        <tspan x="330" dy="25" style="font-size:23px;">CAL_DATETIME_1</tspan>
-        <tspan style="font-weight:bold;" x="330" dy="25">CAL_DESC_1</tspan>
+        <tspan x="330" dy="25" style="font-size:23px;">Temp Indoor Up</tspan>
+        <tspan style="font-weight:bold;" x="330" dy="25">TEMP_INDOOR_UP</tspan>
     </text>
 
-    <text id="calendarentry2" x="330" y="305" font-size="29px" style="font-size:29px;line-height:0%;font-family:'Nimbus Sans L';text-anchor:beginning">
-        <tspan x="330" dy="25" style="font-size:23px;">CAL_DATETIME_2</tspan>
-        <tspan style="font-weight:bold;" x="330" dy="25">CAL_DESC_2</tspan>
+    <text id="calendarentry2" x="330" y="335" font-size="29px" style="font-size:29px;line-height:0%;font-family:'Nimbus Sans L';text-anchor:beginning">
+        <tspan x="330" dy="25" style="font-size:23px;">Temp Indoor Down</tspan>
+        <tspan style="font-weight:bold;" x="330" dy="25">TEMP_INDOOR_DOWN</tspan>
     </text>
 
-    <text id="calendarentry3" x="330" y="355" font-size="29px" style="font-size:29px;line-height:0%;font-family:'Nimbus Sans L';text-anchor:beginning">
-        <tspan x="330" dy="25" style="font-size:23px;">CAL_DATETIME_3</tspan>
-        <tspan style="font-weight:bold;" x="330" dy="25">CAL_DESC_3</tspan>
+    <text id="calendarentry3" x="330" y="415" font-size="29px" style="font-size:29px;line-height:0%;font-family:'Nimbus Sans L';text-anchor:beginning">
+        <tspan x="330" dy="25" style="font-size:23px;">Temp Outdoor</tspan>
+        <tspan style="font-weight:bold;" x="330" dy="25">TEMP_OUTDOOR</tspan>
     </text>
-
-    <text id="calendarentry4" x="330" y="405" font-size="29px" style="font-size:29px;line-height:0%;font-family:'Nimbus Sans L';text-anchor:beginning">
-        <tspan x="330" dy="25" style="font-size:23px;">CAL_DATETIME_4</tspan>
-        <tspan style="font-weight:bold;" x="330" dy="25">CAL_DESC_4</tspan>
-    </text>
-
 
     <text id="textday" x="600" y="75" style="text-anchor:middle;font-weight:600;font-size:47px;line-height:0%;font-family:'Nimbus Sans L';">DAY_NAME</text>
 
